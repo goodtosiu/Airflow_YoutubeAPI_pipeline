@@ -1,0 +1,8 @@
+openai-whisper
+pytube
+yt-dlp
+sentence-transformers
+hdbscan
+ffmpeg-python
+pandas
+numpy
