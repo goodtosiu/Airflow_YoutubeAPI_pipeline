@@ -14,12 +14,15 @@ RUN apt-get update && apt-get install -y \
 # 🏗️ 작업 디렉토리
 WORKDIR /opt/airflow
 
-# 🧾 requirements.txt 복사 및 설치
-COPY requirements.txt .
+# 🧾 requirements.txt 복사
+COPY requirements.txt /opt/airflow/requirements.txt
 
-# 🧩 Airflow 전용: 추가적으로 환경변수가 필요하면 docker-compose에서 설정
-
+# Airflow 컨테이너는 'airflow' 유저로 파이썬 패키지 설치 권장
 USER airflow
 
+# 🔼 pip 최신화 + 프로젝트 의존성 설치 + yt-dlp 최신화
+#  - requirements.txt 설치 후 yt-dlp를 별도로 최신화하여
+#    requirements에 pin이 있더라도 최종적으로 최신 yt-dlp가 사용되도록 함
 RUN pip install --no-cache-dir --upgrade pip \
-    && pip install --no-cache-dir -r requirements.txt
+    && pip install --no-cache-dir -r /opt/airflow/requirements.txt \
+    && pip install --no-cache-dir --upgrade yt-dlp
